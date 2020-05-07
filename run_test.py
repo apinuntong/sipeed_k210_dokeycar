@@ -6,9 +6,10 @@ from board import board_info
 from Maix import GPIO
 i2c = I2C(I2C.I2C0, freq=100000, scl=35, sda=34)
 
-sensor.reset()
+sensor.reset(dual_buff=True)
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QVGA)
+#sensor.skip_frames(time = 2000)
 sensor.set_vflip(1)
 sensor.run(1)
 
@@ -19,7 +20,7 @@ toss1 = 0
 lcd.init(type=2, freq=20000000, color=lcd.BLACK)
 
 #task = kpu.load(0x400000)
-task = kpu.load("/sd/to1.kmodel")
+task = kpu.load("/sd/t6.kmodel")
 ##datazzz = bytes([int(128),int(128),int(0)])
 try:
     while(True):
@@ -42,7 +43,10 @@ try:
         #pmax=max(plist)
         #max_index=plist.index(pmax)
         #print(plist)
-        txx = (plist[0])*127
+        txx = 0
+        if abs(plist[0]) >0.2 :
+            txx = (plist[0])*128
+
         print(txx)
         ##txx = txx*1.5
         if txx > 127 :
@@ -50,9 +54,9 @@ try:
         if txx < -127 :
             txx = -127
         #print(txx)
-        datazzz = bytes([int(128),int(txx+127),int(0)])
+        #datazzz = bytes([int(128),int(txx+127),int(0)])
         ####print(datazzz)
-        i2c.writeto(0x12,bytes([int(128),int(txx+127),int(0)]))
+        i2c.writeto(0x12,bytes([int(143),int(txx+127),int(0)]))
         lcd.display(img)
         lcd.draw_string(90, 0, str(int(1000/(toss1-toss)))+" fps", lcd.RED,lcd.BLACK)
         #lcd.display(img2)
