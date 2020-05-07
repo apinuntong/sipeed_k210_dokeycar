@@ -11,7 +11,7 @@ fm.register(22, fm.fpioa.GPIOHS6, force=True)
 pin12 = GPIO(GPIO.GPIOHS6, GPIO.OUT)
 lcd.init()
 lcd.clear()
-sensor.reset()
+sensor.reset(dual_buff=True)
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QVGA)
 sensor.set_vflip(2)
@@ -38,7 +38,7 @@ while True:
 
     tim = time.ticks_ms()
 
-    if (tim - tim_b) >= 100 :
+    if (tim - tim_b) >= 50 :
         tim_b = tim
         print(clock.fps())
         clock.tick()
