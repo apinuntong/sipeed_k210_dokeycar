@@ -18,7 +18,7 @@ sensor.set_vflip(2)
 sensor.run(1)
 lcd.init(type=2, freq=20000000, color=lcd.BLACK)
 tim = time.ticks_ms()
-#f = open('/sd/dataset.csv', 'a')
+f = open('/sd/dataset.csv', 'a')
 tim_b = tim
 idpg=0
 bt =0
