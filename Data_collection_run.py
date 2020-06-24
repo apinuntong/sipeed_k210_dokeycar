@@ -18,7 +18,7 @@ sensor.set_vflip(2)
 sensor.run(1)
 lcd.init(type=2, freq=20000000, color=lcd.BLACK)
 tim = time.ticks_ms()
-f = open('/sd/dataset.csv', 'a')
+#f = open('/sd/dataset.csv', 'a')
 tim_b = tim
 idpg=0
 bt =0
@@ -32,7 +32,12 @@ img_co_l = 0
 img_co_f = 0
 img_co_r = 0
 
-os.mkdir(str(dirfo))
+
+try:
+  os.mkdir("/sd/"+str(dirfo))
+except:
+  print("An exception occurred")
+
 clock = time.clock()
 while True:
 
@@ -65,7 +70,7 @@ while True:
             if dirfoc == 100 :
                 dirfoc = 0
                 dirfo = dirfo+1
-                os.mkdir(str(dirfo))
+                os.mkdir("/sd/"+str(dirfo))
         img.draw_string(50, 0, "L = "+str(img_co_l), scale=2)
         img.draw_string(50, 20, "F = "+str(img_co_f), scale=2)
         img.draw_string(50, 40, "R = "+str(img_co_r), scale=2)
