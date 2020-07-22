@@ -42,37 +42,38 @@ clock = time.clock()
 while True:
 
     tim = time.ticks_ms()
-
-    if (tim - tim_b) >= 50 :
-        tim_b = tim
-        print(clock.fps())
-        clock.tick()
-        img = sensor.snapshot()
-        tong = i2c.readfrom(0x12, 3)
-        if (int(tong[2]) == 4) and (int(tong[0]) > 135) :
-            if tong3 == 0 :
-                tong3 = 1
-                pin12.value(1)
-            else :
-                tong3 = 0
-                pin12.value(0)
-            idpg=idpg+1
-            dirfoc = dirfoc+1
-            if tong[1] < 85:
-                img_co_l = img_co_l+1
-            elif tong[1] < 170:
-                img_co_f = img_co_f+1
-            else:
-                img_co_r = img_co_r+1
-            f.write(str(dirfo)+"/"+str(idpg)+","+str(int(tong[0]))+","+str(int(tong[1]))+"\n")
-            f.flush()
-            img.save("/sd/"+str(dirfo)+"/"+str(idpg)+".jpg")
-            if dirfoc == 100 :
-                dirfoc = 0
-                dirfo = dirfo+1
-                os.mkdir("/sd/"+str(dirfo))
-        img.draw_string(50, 0, "L = "+str(img_co_l), scale=2)
-        img.draw_string(50, 20, "F = "+str(img_co_f), scale=2)
-        img.draw_string(50, 40, "R = "+str(img_co_r), scale=2)
-        lcd.display(img)
-
+    try:
+        if (tim - tim_b) >= 50 :
+            tim_b = tim
+            print(clock.fps())
+            clock.tick()
+            img = sensor.snapshot()
+            tong = i2c.readfrom(0x12, 3)
+            if (int(tong[2]) == 4) and (int(tong[0]) > 135) :
+                if tong3 == 0 :
+                    tong3 = 1
+                    pin12.value(1)
+                else :
+                    tong3 = 0
+                    pin12.value(0)
+                idpg=idpg+1
+                dirfoc = dirfoc+1
+                if tong[1] < 85:
+                    img_co_l = img_co_l+1
+                elif tong[1] < 170:
+                    img_co_f = img_co_f+1
+                else:
+                    img_co_r = img_co_r+1
+                f.write(str(dirfo)+"/"+str(idpg)+","+str(int(tong[0]))+","+str(int(tong[1]))+"\n")
+                f.flush()
+                img.save("/sd/"+str(dirfo)+"/"+str(idpg)+".jpg")
+                if dirfoc == 100 :
+                    dirfoc = 0
+                    dirfo = dirfo+1
+                    os.mkdir("/sd/"+str(dirfo))
+            img.draw_string(50, 0, "L = "+str(img_co_l), scale=2)
+            img.draw_string(50, 20, "F = "+str(img_co_f), scale=2)
+            img.draw_string(50, 40, "R = "+str(img_co_r), scale=2)
+            lcd.display(img)
+    except:
+        print("error")
