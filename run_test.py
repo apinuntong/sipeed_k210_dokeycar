@@ -4,9 +4,10 @@ from fpioa_manager import fm
 from machine import I2C
 from board import board_info
 from Maix import GPIO
-i2c = I2C(I2C.I2C0, freq=100000, scl=35, sda=34)
+i2c = I2C(I2C.I2C0, freq=100000, scl=35, sda=34)  #ตั้ง I2C 
 
-sensor.reset(dual_buff=True)
+#sensor.reset(dual_buff=True)  #กล้องใวใช้แรมเพิ่ม 
+sensor.reset() #กล้องปกติ 
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QVGA)
 #sensor.skip_frames(time = 2000)
@@ -17,10 +18,10 @@ clock = time.clock()
 toss1 = 0
 
 
-lcd.init(type=2, freq=20000000, color=lcd.BLACK)
+lcd.init(type=2, freq=20000000, color=lcd.BLACK)   #ตั้งค่าจอ
 
-#task = kpu.load(0x400000)
-task = kpu.load("/sd/t6.kmodel")
+#task = kpu.load(0x400000)  #สำหรับการโหลดโมเดลใน Flash
+task = kpu.load("/sd/t6.kmodel")  #สำหรับการโหลดโมเดลใน SD
 ##datazzz = bytes([int(128),int(128),int(0)])
 try:
     while(True):
@@ -45,7 +46,7 @@ try:
         #print(plist)
         txx = 0
         if abs(plist[0]) >0.2 :
-            txx = (plist[0])*128
+            txx = (plist[0])*128  # 128 คือ เกรน การเลี้ยว
 
         print(txx)
         ##txx = txx*1.5
@@ -56,7 +57,7 @@ try:
         #print(txx)
         #datazzz = bytes([int(128),int(txx+127),int(0)])
         ####print(datazzz)
-        i2c.writeto(0x12,bytes([int(143),int(txx+127),int(0)]))
+        i2c.writeto(0x12,bytes([int(143),int(txx+127),int(0)]))   # 143 คือความเร็วในการวิ่ง
         lcd.display(img)
         lcd.draw_string(90, 0, str(int(1000/(toss1-toss)))+" fps", lcd.RED,lcd.BLACK)
         #lcd.display(img2)
