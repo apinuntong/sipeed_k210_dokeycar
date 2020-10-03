@@ -1,4 +1,5 @@
 import os
+import uos
 import  sensor, image, lcd, time
 from fpioa_manager import fm
 from machine import I2C
@@ -19,12 +20,14 @@ sensor.run(1)
 lcd.init(type=2, freq=20000000, color=lcd.BLACK)
 dirfo = 0
 dirfoc = 0
+olddatasetnum = 0
 try:
     print("load old dataset.csv")
     uos.rename('/sd/dataset.csv', '/sd/dataset.txt')
     f=open('/sd/dataset.txt','r')
     labels=f.readlines()
     f.close()
+    olddatasetnum = len(labels)
     dirfoc = len(labels)%100
     dirfo = int(len(labels)/100)
     print(dirfo,dirfoc)
@@ -88,6 +91,7 @@ while True:
             img.draw_string(50, 0, "L = "+str(img_co_l), scale=2)
             img.draw_string(50, 20, "F = "+str(img_co_f), scale=2)
             img.draw_string(50, 40, "R = "+str(img_co_r), scale=2)
+            img.draw_string(50, 50, "old data = "+str(img_co_r), scale=2)
             lcd.display(img)
     except:
         print("error")
