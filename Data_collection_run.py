@@ -17,13 +17,27 @@ sensor.set_framesize(sensor.QVGA)
 sensor.set_vflip(2)
 sensor.run(1)
 lcd.init(type=2, freq=20000000, color=lcd.BLACK)
+dirfo = 0
+dirfoc = 0
+try:
+    print("load old dataset.csv")
+    uos.rename('/sd/dataset.csv', '/sd/dataset.txt')
+    f=open('/sd/dataset.txt','r')
+    labels=f.readlines()
+    f.close()
+    dirfoc = len(labels)%100
+    dirfo = int(len(labels)/100)
+    print(dirfo,dirfoc)
+    uos.rename('/sd/dataset.txt', '/sd/dataset.csv')
+except:
+    print("not dataset.csv")
+
 tim = time.ticks_ms()
 f = open('/sd/dataset.csv', 'a')
 tim_b = tim
 idpg=0
 bt =0
-dirfo = 0
-dirfoc = 0
+
 eee1 = 0
 tong3 = 0
 toss1 = 0
