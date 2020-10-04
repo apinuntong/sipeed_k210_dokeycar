@@ -20,6 +20,7 @@ sensor.run(1)
 lcd.init(type=2, freq=20000000, color=lcd.BLACK)
 dirfo = 0
 dirfoc = 0
+idpg=0
 olddatasetnum = 0
 try:
     print(uos.listdir("/sd"))
@@ -35,17 +36,20 @@ try:
     labels=f.readlines()
     f.close()
     olddatasetnum = len(labels)
+    idpg = olddatasetnum
     dirfoc = len(labels)%100
     dirfo = int(len(labels)/100)
     print(dirfo,dirfoc)
     uos.rename('/sd/dataset.txt', '/sd/dataset.csv')
 except:
     print("not dataset.csv")
+    lcd.draw_string(45, 110, "read old dataset error", lcd.WHITE, lcd.RED)
+    time.sleep(5)
 
 tim = time.ticks_ms()
-f = open('/sd/dataset.csv', 'a')
+
 tim_b = tim
-idpg=0
+
 bt =0
 
 eee1 = 0
@@ -61,7 +65,10 @@ try:
   os.mkdir("/sd/"+str(dirfo))
 except:
   print("An exception occurred")
-
+try:
+    f = open('/sd/dataset.csv', 'a')
+except:
+    print("no '/sd/dataset.csv'")
 clock = time.clock()
 while True:
 
@@ -95,10 +102,10 @@ while True:
                     dirfoc = 0
                     dirfo = dirfo+1
                     os.mkdir("/sd/"+str(dirfo))
-            img.draw_string(50, 0, "L = "+str(img_co_l), scale=2)
-            img.draw_string(50, 20, "F = "+str(img_co_f), scale=2)
-            img.draw_string(50, 40, "R = "+str(img_co_r), scale=2)
-            img.draw_string(50, 50, "old data = "+str(img_co_r), scale=2)
+            a = img.draw_string(50, 0, "L = "+str(img_co_l), scale=2)
+            a = img.draw_string(50, 20, "F = "+str(img_co_f), scale=2)
+            a = img.draw_string(50, 40, "R = "+str(img_co_r), scale=2)
+            a = img.draw_string(50, 60, "OD = "+str(olddatasetnum), scale=2)
             lcd.display(img)
     except:
         print("error")
