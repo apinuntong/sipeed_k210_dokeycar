@@ -22,6 +22,13 @@ dirfo = 0
 dirfoc = 0
 olddatasetnum = 0
 try:
+    print(uos.listdir("/sd"))
+except:
+    print("no sd dir")
+    while 1 :
+        lcd.draw_string(85, 110, "no sd dir", lcd.WHITE, lcd.RED)
+        time.sleep(1)
+try:
     print("load old dataset.csv")
     uos.rename('/sd/dataset.csv', '/sd/dataset.txt')
     f=open('/sd/dataset.txt','r')
