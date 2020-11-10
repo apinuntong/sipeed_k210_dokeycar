@@ -7,21 +7,29 @@ from board import board_info
 from Maix import GPIO
 
 #from board import board_info
-i2c = I2C(I2C.I2C0, freq=100000, scl=35, sda=34)
-fm.register(22, fm.fpioa.GPIOHS6, force=True)
-pin12 = GPIO(GPIO.GPIOHS6, GPIO.OUT)
-lcd.init()
-lcd.clear()
 sensor.reset(dual_buff=True)
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QVGA)
 sensor.set_vflip(2)
 sensor.run(1)
 lcd.init(type=2, freq=20000000, color=lcd.BLACK)
+i2c = I2C(I2C.I2C0, freq=100000, scl=35, sda=34)
+fm.register(22, fm.fpioa.GPIOHS6, force=True)
+pin12 = GPIO(GPIO.GPIOHS6, GPIO.OUT)
 dirfo = 0
 dirfoc = 0
 idpg=0
 olddatasetnum = 0
+try:
+    if i2c.scan()[0] == 18 :
+        print("I2C OK")
+        lcd.draw_string(85, 110, "I2C OK", lcd.WHITE, lcd.RED)
+        time.sleep(1)
+except:
+    print("no I2C")
+    while 1 :
+        lcd.draw_string(85, 110, "no I2C", lcd.WHITE, lcd.RED)
+        time.sleep(1)
 try:
     print(uos.listdir("/sd"))
 except:
